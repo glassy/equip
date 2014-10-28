@@ -1,79 +1,327 @@
+
 <!DOCTYPE html>
-<html>
+<html ng-app = "reporterApp">
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Equip : printable">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Equip</title>
-  </head>
+<script src="javascripts/lib/jquery-1.10.2.js"></script>
+<script src="javascripts/lib/jquery-ui.js"></script>
+<script src="javascripts/lib/angular.min.js"></script>
 
-  <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/glassy/equip">View on GitHub</a>
+  <title>透明連線識別證列印</title>
 
-          <h1 id="project_title">Equip</h1>
-          <h2 id="project_tagline">printable</h2>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/glassy/equip/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/glassy/equip/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+  <meta charset=utf-8 />
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="透明連線處識別證列印。" />
+    <meta property="og:url" content="http://glassy.github.io/we/equip/index.html" />
+    <meta property="og:image" content="http://glassy.github.io/we/standup/img/glassy2.png" />
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+  <meta name="description" content="透明連線識別證列印。">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+  <style type="text/css">
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+  body {        /* A4 */
+    width: 208mm;
+    font-family: Apple LiGothic Medium, "Microsoft JhengHei",微軟正黑體,Arial,Tahoma,Century gothic,sans-serif;
+  }
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+  table#main {
+    width: 90%;
+    border-collapse: collapse;
+  }
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+  #main td {
+    width: 50%;
+    text-align: center;
+    vertical-align: top;
+  }
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+  #main td#r {
+    text-align: left;
+    vertical-align: middle;
+    padding: 5mm;
+  }
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
+  img.face {
+    width: 100%;
+  }
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Equip maintained by <a href="https://github.com/glassy">glassy</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+  img.qr {
+    width: 20mm;
+    float: left;
+  }
 
-    
+  #rt {
+    font-size: 120%;
+  }
 
-  </body>
+  #titleBar {
+    display: inline-block;
+    width: 102%;
+    color: #fff;
+    text-align: center;
+    font-size: 300%;
+
+/*
+    -webkit-box-shadow: inset 0 0 0 1000px black, 0px 3mm 0px rgba(219,31,5,1);
+    -moz-box-shadow: inset 0 0 0 1000px black, 0px 3mm 0px rgba(219,31,5,1);
+    box-shadow: inset 0 0 0 1000px black, 0px 3mm 0px rgba(219,31,5,1);
+
+    padding-top: 6mm;
+    padding-bottom: 3.5mm;
+
+*/
+
+    margin-top: -1mm;
+    margin-left: -5.5px;
+
+    margin-bottom: 6mm;
+  }
+
+  #titleBar span {
+    position: relative;
+    z-index: 99;
+  }
+
+/*
+  #redBar {
+    display: inline-block;
+    width: 100%;
+    height: 2mm;
+    box-shadow: inset 0 0 0 1000px red;
+
+  } */
+
+  table#in td#left {
+    text-align: left;
+  }
+
+  table#in td#right {
+    font-size: 200%;
+    vertical-align: middle;
+  }
+
+  #foot {
+    font-size: 120%;
+    font-weight: bold;
+  }
+
+
+  a#doPrint {
+    position: fixed;
+    bottom: 20%;
+    left: 40%;
+    z-index: 31;
+    top: 50%;
+    left: 25%;
+    margin-top: -15%;
+    margin-left: -5%;
+    width: 50%;
+    height: 10%;
+    text-decoration: none;
+    color: rgba(255,255,255,0.5);
+    background-color: rgba(219,87,5,0.5);
+    font-family: 'Yanone Kaffeesatz';
+    font-weight: 700;
+    font-size: 200%;
+    line-height: 200%;
+    cursor: pointer;
+    display: block; 
+    padding: 5px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0px 9px 0px rgba(219,31,5,.5), 0px 9px 25px rgba(0,0,0,.4);
+    -moz-box-shadow: 0px 9px 0px rgba(219,31,5,.5), 0px 9px 25px rgba(0,0,0,.4);
+    box-shadow: 0px 9px 0px rgba(219,31,5,.5), 0px 9px 25px rgba(0,0,0,.4);
+
+    text-align: center;
+  
+  -webkit-transition: all .1s ease;
+  -moz-transition: all .1s ease;
+  -ms-transition: all .1s ease;
+  -o-transition: all .1s ease;
+  transition: all .1s ease;
+}
+
+a#doPrint:hover {
+    color: rgba(255,255,255,1);
+    background-color: rgba(219,87,5,1);
+    -webkit-box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
+    -moz-box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
+    box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
+
+}
+
+a#doPrint:active {
+    -webkit-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+    -moz-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+    box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+}
+
+textarea {
+  font-size: 16pt;
+}
+
+  </style>
+
+
+</head>
+
+<body  ng-controller = "Ctrl" >
+
+    <table id = "main" border = "3px">
+
+      <tr>
+        <td>
+
+      <div id = "titleBar">
+
+        <span><img src="images/r2.png"></span>
+      </div>
+
+    <!--  <div id = "redBar">
+      </div>  -->
+
+
+      <table id ="in">
+      <tr>
+      <td id ="left">
+            <img class = "face" ng-src = "{{root.photo}}" ng-show = "root.photo" ng-click = "root.photo = ''" />
+            <span ng-hide = "root.photo">
+
+              <ol>
+                <li>「貼」您的照片 
+                <li>「印」下您的識別證
+                <li>「前」往現場
+              </ol>
+
+              <input class="hidden" type="file" fileread="root.photo" accept="image/*" capture="camera" id="file-upload" />
+
+            </span>
+        </div>
+      </td>
+
+      <td id = "right">
+
+            <span ng-show = "root.name  && !editing" ng-bind = "root.name">
+            </span>
+
+            <span ng-hide = "root.name && !editing">
+              請輸入您的名字：<input ng-model = "root.name" ng-focus = "editing = 1" ng-blur = "editing = 0"/ ng-keypress = "maybeDone($event)">
+            </span>
+
+          </td>
+        </tr>
+      </table>
+
+      </div>
+
+      <br><br>
+
+
+        <span id = "foot">
+            透明連線
+        </span> 
+
+        <span id = "foot">
+           主席
+        </span>     
+
+      </td>
+
+      <td id = "r">
+
+
+        <span id = "rt">透明連線</span>
+
+      <br><br>
+
+
+        ☯透明連線是一個平權的阿米巴組織，我就是主席。<br><br>
+
+        ☯我參與的原因是希望<textarea ng-show = "editTarget" ng-model = "Target" ng-init = " Target = '讓光穿透黑暗，彼此都能去瞭解彼此。'" ng-mouseout = "editTarget = false" ></textarea><span ng-hide= "editTarget" ng-bind = "Target" ng-mouseover = "editTarget = true"></span><br><br>
+
+        ☯太陽花學運佔領立法院行動之後，我們有沒有可能透過選舉，合法進入立法院？<textarea ng-show = "editA" ng-model = "Answer" ng-init = " Answer = '只要同心協力，就辦得到。'" ng-mouseout = "editA = false" ></textarea><span ng-hide= "editA" ng-bind = "Answer" ng-mouseover = "editA = true"></span><br><br>
+
+        ☯我希望<textarea rows = "5" ng-show = "editH" ng-model = "Hope" ng-init = " Hope = '連結各方關心弱勢、平民和土地的人，形成足以在立法院守護人民的勢力。'" ng-mouseout = "editH = false" ></textarea><span ng-hide= "editH" ng-bind = "Hope" ng-mouseover = "editH = true"></span><br><br>
+
+        <a href = "http://hack.g0v.tw/glassy"><img class = "qr" src="http://chart.apis.google.com/chart?chs=200x200&amp;cht=qr&amp;chld=|1&amp;chl=http://hack.g0v.tw/glassy"></a>
+        <br><br>
+        http://hack.g0v.tw/glassy
+
+      </td>
+  
+
+
+<a id = "doPrint" ng-show ="root.photo && root.name &&!editing" onclick = "$(this).hide(); window.print()"> 列印!  </a>
+
+
+
+</body>
+
+<script type="text/javascript">
+
+  var reporterApp = angular.module('reporterApp', []);
+
+  reporterApp.directive("fileread", [function () {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                var reader = new FileReader();
+
+                reader.onload = function (loadEvent) {
+                    scope.$apply(function () {
+                        var f = loadEvent.target.result; 
+                        
+                        if (f.substr(0,1) == '{') {
+                            f = JSON.parse(f);
+                        }                     
+                        
+                        scope.fileread = f;
+                      
+                    });
+                }
+
+                if (attributes.filetype == 'json') {
+                    reader.readAsText(changeEvent.target.files[0]);
+                } else {
+
+                    var filesize = ((changeEvent.target.files[0].size/1024)/1024).toFixed(4)*1024; // KB
+
+                //    if (filesize > 100) {
+                //      alert("檔案超過100KB");                // limit: 100KB
+                //    } else {
+                      reader.readAsDataURL(changeEvent.target.files[0]);                     
+                //    }
+                  
+                  }
+                
+            });
+        }
+    }
+}]);
+  
+  var Ctrl = function ($scope) {
+    $scope.root = {};
+
+    $scope.maybeDone = function(e){
+      if (e.keyCode == 13) $scope.editing = 0;
+    }
+  }
+
+
+</script>
+
 </html>
